@@ -12,12 +12,14 @@ import SwiftCSV
 import Cartography
 
 class IssuesViewController: UIViewController {
-    // MARK: -
+    // MARK: - IBOutlets
     private var tableView: UITableView!
+    
+    // MARK: - Dependencies
+    var viewModel: IssuesViewModel?
     var dataSource: TableViewDataSource<Issue>?
     
-    var viewModel: IssuesViewModel?
-    
+    // MARK: - UI config
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -28,18 +30,21 @@ class IssuesViewController: UIViewController {
         title = "Issues"
         
         tableView = UITableView()
-        tableView.rowHeight = UITableView.automaticDimension
         view.addSubview(tableView)
         
         constrain(view, tableView) { (view, tableView) in
             tableView.edges == view.edges
         }
         
+        // Don't show empty cells
+        tableView.tableFooterView = UIView()
+        // Register custom cell
         IssueTableViewCell.registerNib(in: tableView)
     }
     
+    // MARK: - CSV Loading
     private func loadCSV() {
-        viewModel?.update { result in
+        viewModel?.loadIssues { result in
             switch result {
             case .success(let issues):
                 self.dataSource = .make(for: issues)

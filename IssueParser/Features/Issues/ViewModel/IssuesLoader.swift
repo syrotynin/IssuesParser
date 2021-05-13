@@ -9,17 +9,33 @@ import Foundation
 import SwiftCSV
 
 struct IssuesLoader<T: Decodable> {
-    
     typealias LoadCompletion = (Result<[T], Error>) -> ()
     
     enum LoadError: Error {
         case fileNotFound
     }
     
-    func loadCSV(forResource name: String, bundle: Bundle = .main, completion: @escaping LoadCompletion) {
+    private let bundle: Bundle
+    private let decoder: JSONDecoder
+    private let encoder: JSONEncoder
+    private let callbackQueue: DispatchQueue
+    
+    init(bundle: Bundle = .main,
+         decoder: JSONDecoder = .csvDecoder,
+         encoder: JSONEncoder = JSONEncoder(),
+         callbackQueue: DispatchQueue = .main) {
+        self.bundle = bundle
+        self.decoder = decoder
+        self.encoder = encoder
+        self.callbackQueue = callbackQueue
+    }
+    
+    func loadCSV(forResource name: String, completion: @escaping LoadCompletion) {
         DispatchQueue.global(qos: .background).async {
             guard let url = bundle.url(forResource: name, withExtension: ".csv") else {
-                completion(.failure(LoadError.fileNotFound))
+                callbackQueue.async {
+                    completion(.failure(LoadError.fileNotFound))
+                }
                 return
             }
             
@@ -28,14 +44,18 @@ struct IssuesLoader<T: Decodable> {
                 print(csv.namedRows) // TODO: Remove
                 
                 let elements: [T] = csv.namedRows.compactMap { element in
-                    guard let json = try? JSONEncoder().encode(element), let decoded = try? JSONDecoder().decode(T.self, from: json) else {
+                    guard let json = try? encoder.encode(element), let decoded = try? decoder.decode(T.self, from: json) else {
                         return nil
                     }
                     return decoded
                 }
-                completion(.success(elements))
+                callbackQueue.async {
+                    completion(.success(elements))
+                }
             } catch let error {
-                completion(.failure(error))
+                callbackQueue.async {
+                    completion(.failure(error))
+                }
             }
         }
     }

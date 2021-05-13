@@ -25,7 +25,6 @@ class ApplicationCoordinator: Coordinator {
 
 		let issuesCoordinator = IssuesCoordinator(presenter: rootViewController)
 		self.issuesCoordinator = issuesCoordinator
-
         issuesCoordinator.start()
 	}
 }

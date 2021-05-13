@@ -7,7 +7,7 @@
 
 import UIKit
 
-class IssueTableViewCell: UITableViewCell, ReusableTableCell, ConfigurableCell {
+class IssueTableViewCell: UITableViewCell, ReusableTableCell {
     // MARK: - IBOutlets
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var surNameLabel: UILabel!
@@ -17,7 +17,7 @@ class IssueTableViewCell: UITableViewCell, ReusableTableCell, ConfigurableCell {
     func configure(with model: Issue) {
         firstNameLabel.text = model.firstName
         surNameLabel.text = model.surName
-        birthDateLabel.text = model.birthDate
+        birthDateLabel.text = DateFormatter.short.string(from: model.birthDate)
         issueCountLabel.text = "\(model.issuesCount) issues"
     }
 }

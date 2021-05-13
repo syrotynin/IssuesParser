@@ -10,14 +10,12 @@ import Foundation
 import UIKit
 
 // MARK: - Base reusable protocol
-protocol Reusable
-{
+protocol Reusable {
 	static var identifier: String { get }
 	static var nib: UINib { get }
 }
 
-extension Reusable
-{
+extension Reusable {
 	static var identifier: String {
 		return String(describing: self)
 	}
@@ -30,15 +28,12 @@ extension Reusable
 // MARK: - Reusable protocols for specific containers
 protocol ReusableTableCell: Reusable where Self: UITableViewCell {}
 
-extension ReusableTableCell
-{
-	static func registerNib(in tableView: UITableView)
-	{
+extension ReusableTableCell {
+	static func registerNib(in tableView: UITableView) {
 		tableView.register(nib, forCellReuseIdentifier: identifier)
 	}
 
-	static func register(in tableView: UITableView)
-	{
+	static func register(in tableView: UITableView) {
 		tableView.register(self, forCellReuseIdentifier: identifier)
 	}
 }

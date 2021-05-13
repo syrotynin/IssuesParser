@@ -10,10 +10,11 @@ import Foundation
 struct Issue {
     let firstName: String
     let surName: String
-    let issuesCount: String
-    let birthDate: String
+    let issuesCount: Int
+    let birthDate: Date
 }
 
+// MARK: - Decoding
 extension Issue: Decodable {
     private enum CodingKeys: String, CodingKey {
         case firstName = "First name"
@@ -26,13 +27,7 @@ extension Issue: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         firstName = try container.decode(String.self, forKey: .firstName)
         surName = try container.decode(String.self, forKey: .surName)
-        issuesCount = try container.decode(String.self, forKey: .issuesCount)
-        birthDate = try container.decode(String.self, forKey: .birthDate)
-    }
-}
-
-extension Issue {
-    var information: String {
-        return "\(firstName) \(surName) - \(issuesCount)"
+        issuesCount = Int(try container.decode(String.self, forKey: .issuesCount)) ?? 0
+        birthDate = try container.decode(Date.self, forKey: .birthDate)
     }
 }
