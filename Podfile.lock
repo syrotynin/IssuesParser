@@ -1,0 +1,20 @@
+PODS:
+  - Cartography (4.0.0)
+  - SwiftCSV (0.6.0)
+
+DEPENDENCIES:
+  - Cartography
+  - SwiftCSV
+
+SPEC REPOS:
+  trunk:
+    - Cartography
+    - SwiftCSV
+
+SPEC CHECKSUMS:
+  Cartography: c5626d29056b20f1e95c017326ee4df57cc39ad8
+  SwiftCSV: ebc63cacc3820042537288c0cc647946261f7c2c
+
+PODFILE CHECKSUM: 9731114317e4ebebfed11f64949c18636e2f8fdb
+
+COCOAPODS: 1.10.1
