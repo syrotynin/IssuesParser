@@ -41,7 +41,6 @@ struct IssuesLoader<T: Decodable> {
             
             do {
                 let csv = try CSV(url: url)
-                print(csv.namedRows) // TODO: Remove
                 
                 let elements: [T] = csv.namedRows.compactMap { element in
                     guard let json = try? encoder.encode(element), let decoded = try? decoder.decode(T.self, from: json) else {

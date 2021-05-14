@@ -14,6 +14,7 @@ import Cartography
 class IssuesViewController: UIViewController {
     // MARK: - IBOutlets
     private var tableView: UITableView!
+    private var spinner = UIActivityIndicatorView(style: .large)
     
     // MARK: - Dependencies
     var viewModel: IssuesViewModel?
@@ -29,6 +30,11 @@ class IssuesViewController: UIViewController {
     private func configureUI() {
         title = "Issues"
         
+        configureTableView()
+        configureActivityIndicator()
+    }
+    
+    private func configureTableView() {
         tableView = UITableView()
         view.addSubview(tableView)
         
@@ -42,9 +48,21 @@ class IssuesViewController: UIViewController {
         IssueTableViewCell.registerNib(in: tableView)
     }
     
+    private func configureActivityIndicator() {
+        view.addSubview(spinner)
+        
+        constrain(view, spinner) { (view, spinner) in
+            spinner.center == view.center
+        }
+    }
+    
     // MARK: - CSV Loading
     private func loadCSV() {
-        viewModel?.loadIssues { result in
+        spinner.startAnimating()
+        
+        viewModel?.loadIssues { [unowned self] result in
+            self.spinner.stopAnimating()
+            
             switch result {
             case .success(let issues):
                 self.dataSource = .make(for: issues)

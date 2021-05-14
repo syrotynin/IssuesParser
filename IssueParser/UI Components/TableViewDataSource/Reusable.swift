@@ -32,8 +32,4 @@ extension ReusableTableCell {
 	static func registerNib(in tableView: UITableView) {
 		tableView.register(nib, forCellReuseIdentifier: identifier)
 	}
-
-	static func register(in tableView: UITableView) {
-		tableView.register(self, forCellReuseIdentifier: identifier)
-	}
 }

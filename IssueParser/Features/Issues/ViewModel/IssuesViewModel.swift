@@ -8,13 +8,9 @@
 import Foundation
 
 class IssuesViewModel {
-    var issuesLoader = IssuesLoader<Issue>()
+    let issuesLoader = IssuesLoader<Issue>()
     
     func loadIssues(_ completion: @escaping (Result<[Issue], Error>) -> ()) {
-        issuesLoader.loadCSV(forResource: "issues") { result in
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
+        issuesLoader.loadCSV(forResource: "issues", completion: completion)
     }
 }
